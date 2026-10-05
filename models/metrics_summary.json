@@ -1,0 +1,53 @@
+{
+    "dataset_records": 253680,
+    "features": [
+        "HighBP",
+        "HighChol",
+        "CholCheck",
+        "BMI",
+        "Smoker",
+        "Stroke",
+        "HeartDiseaseorAttack",
+        "PhysActivity",
+        "Fruits",
+        "Veggies",
+        "HvyAlcoholConsump",
+        "AnyHealthcare",
+        "NoDocbcCost",
+        "GenHlth",
+        "MentHlth",
+        "PhysHlth",
+        "DiffWalk",
+        "Sex",
+        "Age",
+        "Education",
+        "Income"
+    ],
+    "best_model": "HistGradientBoosting",
+    "benchmark_results": {
+        "Logistic Regression": {
+            "accuracy": 0.7315,
+            "precision": 0.3107,
+            "recall": 0.7611,
+            "f1_score": 0.4413,
+            "roc_auc": 0.8196,
+            "train_time_sec": 0.27
+        },
+        "Random Forest (100 Trees)": {
+            "accuracy": 0.7464,
+            "precision": 0.3217,
+            "recall": 0.7399,
+            "f1_score": 0.4484,
+            "roc_auc": 0.8227,
+            "train_time_sec": 4.07
+        },
+        "HistGradientBoosting": {
+            "accuracy": 0.7197,
+            "precision": 0.3055,
+            "recall": 0.7946,
+            "f1_score": 0.4413,
+            "roc_auc": 0.8268,
+            "train_time_sec": 4.39
+        }
+    }
+}
