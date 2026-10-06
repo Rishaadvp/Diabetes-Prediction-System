@@ -151,57 +151,75 @@ def run_pipeline():
         }, f, indent=4)
     print(f"[+] Benchmark metrics saved to: {metrics_path}")
 
-    # Plot & Save ROC Curves
-    plt.figure(figsize=(8, 6))
+    # Plot & Save ROC Curves (Calm Healthcare Palette)
+    plt.figure(figsize=(8, 6), facecolor='#F8FBFB')
+    ax = plt.gca()
+    ax.set_facecolor('#FFFFFF')
+    
+    health_colors = {
+        "Logistic Regression": "#0284C7",        # Soft Clinical Cyan
+        "Random Forest (100 Trees)": "#2E7D6F",   # Serene Healing Sage
+        "HistGradientBoosting": "#134E5E"         # Deep Eucalyptus Teal
+    }
+    
     for name, r in roc_data.items():
-        plt.plot(r["fpr"], r["tpr"], lw=2, label=f"{name} (AUC = {r['auc']:.3f})")
-    plt.plot([0, 1], [0, 1], color='gray', linestyle='--', label='Random Chance (AUC = 0.500)')
+        c = health_colors.get(name, "#134E5E")
+        plt.plot(r["fpr"], r["tpr"], lw=2.5, color=c, label=f"{name} (AUC = {r['auc']:.3f})")
+    plt.plot([0, 1], [0, 1], color='#94A3B8', linestyle='--', lw=1.5, label='Random Chance (AUC = 0.500)')
     plt.xlim([0.0, 1.0])
     plt.ylim([0.0, 1.05])
-    plt.xlabel('False Positive Rate (1 - Specificity)', fontsize=12)
-    plt.ylabel('True Positive Rate (Sensitivity / Recall)', fontsize=12)
-    plt.title('ROC Curves Comparison - Diabetes Risk Prediction', fontsize=14, fontweight='bold')
-    plt.legend(loc="lower right", fontsize=10)
-    plt.grid(alpha=0.3)
+    plt.xlabel('False Positive Rate (1 - Specificity)', fontsize=11, color='#334155', fontweight='semibold')
+    plt.ylabel('True Positive Rate (Sensitivity / Recall)', fontsize=11, color='#334155', fontweight='semibold')
+    plt.title('ROC Curves - Clinical Diagnostic Performance', fontsize=13, fontweight='bold', color='#134E5E', pad=12)
+    plt.legend(loc="lower right", fontsize=10, frameon=True, facecolor='#F8FAFC', edgecolor='#CBD5E1')
+    plt.grid(color='#E2E8F0', linestyle='-', linewidth=0.8, alpha=0.7)
+    for spine in ax.spines.values():
+        spine.set_color('#CBD5E1')
     roc_plot_path = os.path.join(REPORTS_DIR, "roc_curve.png")
     plt.tight_layout()
-    plt.savefig(roc_plot_path, dpi=300)
+    plt.savefig(roc_plot_path, dpi=300, facecolor='#F8FBFB')
     plt.close()
     print(f"[+] Saved ROC curve comparison to: {roc_plot_path}")
 
-    # Best Model Confusion Matrix
+    # Best Model Confusion Matrix (Calm Seafoam/Mint Green Colormap)
     best_config = models[best_model_name]
     best_model = best_config["model"]
     test_feat = X_test_scaled if best_config["use_scaled"] else X_test
     best_preds = best_model.predict(test_feat)
     cm = confusion_matrix(y_test, best_preds)
 
-    plt.figure(figsize=(6, 5))
-    sns.heatmap(cm, annot=True, fmt='d', cmap='Blues',
+    plt.figure(figsize=(6, 5), facecolor='#F8FBFB')
+    ax = plt.gca()
+    sns.heatmap(cm, annot=True, fmt='d', cmap='YlGnBu', cbar=False,
+                annot_kws={"size": 13, "weight": "bold", "color": "#1E293B"},
                 xticklabels=['Healthy (0)', 'Diabetic (1)'],
                 yticklabels=['Healthy (0)', 'Diabetic (1)'])
-    plt.xlabel('Predicted Class', fontsize=12)
-    plt.ylabel('Actual Class', fontsize=12)
-    plt.title(f'Confusion Matrix ({best_model_name})', fontsize=14, fontweight='bold')
+    plt.xlabel('Predicted Class', fontsize=11, color='#334155', fontweight='semibold')
+    plt.ylabel('Actual Class', fontsize=11, color='#334155', fontweight='semibold')
+    plt.title(f'Diagnostic Confusion Matrix ({best_model_name})', fontsize=13, fontweight='bold', color='#134E5E', pad=12)
     cm_plot_path = os.path.join(REPORTS_DIR, "confusion_matrix.png")
     plt.tight_layout()
-    plt.savefig(cm_plot_path, dpi=300)
+    plt.savefig(cm_plot_path, dpi=300, facecolor='#F8FBFB')
     plt.close()
     print(f"[+] Saved Confusion Matrix to: {cm_plot_path}")
 
-    # Feature Importance Plot (From Random Forest or Tree-based model)
+    # Feature Importance Plot (Serene Sage / Eucalyptus Bars)
     rf_model = models["Random Forest (100 Trees)"]["model"]
     importances = rf_model.feature_importances_
     feat_series = pd.Series(importances, index=FEATURE_COLS).sort_values(ascending=True)
 
-    plt.figure(figsize=(9, 7))
-    feat_series.plot(kind='barh', color='#2b5c8f')
-    plt.xlabel('Relative Feature Importance Score', fontsize=12)
-    plt.title('Clinical & Lifestyle Feature Importance (Random Forest)', fontsize=14, fontweight='bold')
-    plt.grid(axis='x', alpha=0.3)
+    plt.figure(figsize=(9, 7), facecolor='#F8FBFB')
+    ax = plt.gca()
+    ax.set_facecolor('#FFFFFF')
+    bars = feat_series.plot(kind='barh', color='#2E7D6F', edgecolor='#1F5A50', linewidth=0.8, alpha=0.9)
+    plt.xlabel('Relative Clinical Importance Score', fontsize=11, color='#334155', fontweight='semibold')
+    plt.title('Clinical & Lifestyle Feature Importance (Random Forest)', fontsize=13, fontweight='bold', color='#134E5E', pad=12)
+    plt.grid(axis='x', color='#E2E8F0', linestyle='-', linewidth=0.8, alpha=0.7)
+    for spine in ax.spines.values():
+        spine.set_color('#CBD5E1')
     fi_plot_path = os.path.join(REPORTS_DIR, "feature_importance.png")
     plt.tight_layout()
-    plt.savefig(fi_plot_path, dpi=300)
+    plt.savefig(fi_plot_path, dpi=300, facecolor='#F8FBFB')
     plt.close()
     print(f"[+] Saved Feature Importance chart to: {fi_plot_path}")
 

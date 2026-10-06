@@ -39,3 +39,6 @@ env/
 # Operating System files
 .DS_Store
 Thumbs.db
+
+# Microsoft Office temp/lock files
+~$*

@@ -6,17 +6,19 @@ from pptx.dml.color import RGBColor
 from pptx.enum.shapes import MSO_SHAPE
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-OUTPUT_PPTX = os.path.join(BASE_DIR, "Big_Data_Diabetes_Prediction_Presentation.pptx")
+OUTPUT_PPTX = os.path.join(BASE_DIR, "Big_Data_Diabetes_Prediction_Presentation_v2.pptx")
 REPORTS_DIR = os.path.join(BASE_DIR, "reports")
 
-# Color Palette
-NAVY = RGBColor(27, 54, 93)        # #1B365D
-TEAL = RGBColor(13, 148, 136)      # #0D9488
-DARK_GRAY = RGBColor(55, 65, 81)   # #374151
-LIGHT_BG = RGBColor(248, 250, 252) # #F8FAFC
-BOX_BG = RGBColor(241, 245, 249)   # #F1F5F9
+# Calm Healthcare Color Palette
+# Inspired by clinical serenity — soft mints, sage greens, warm whites
+NAVY = RGBColor(19, 78, 94)         # #134E5E  Deep Eucalyptus Teal (header text)
+TEAL = RGBColor(46, 125, 111)       # #2E7D6F  Healing Sage Green (accent)
+DARK_GRAY = RGBColor(51, 65, 85)    # #334155  Muted Slate (body text)
+LIGHT_BG = RGBColor(248, 251, 251)  # #F8FBFB  Soft Clinical White (slide bg)
+BOX_BG = RGBColor(236, 247, 244)    # #ECF7F4  Mint Foam (callout box bg)
 WHITE = RGBColor(255, 255, 255)
-ACCENT_BLUE = RGBColor(37, 99, 235)
+ACCENT = RGBColor(2, 132, 199)      # #0284C7  Clear Sky Blue (highlights)
+SAGE = RGBColor(100, 160, 145)      # #64A091  Soft Sage (secondary accent)
 
 prs = Presentation()
 prs.slide_width = Inches(13.333)
@@ -25,44 +27,62 @@ prs.slide_height = Inches(7.5)
 blank_layout = prs.slide_layouts[6]
 
 def create_header(slide, title_text, category_text="BIG DATA ANALYTICS (BDA) HEALTHCARE PROJECT"):
-    header_box = slide.shapes.add_textbox(Inches(0.8), Inches(0.4), Inches(11.7), Inches(1.1))
+    # Soft clinical mint-white slide background
+    bg = slide.shapes.add_shape(MSO_SHAPE.RECTANGLE, 0, 0, Inches(13.333), Inches(7.5))
+    bg.fill.solid()
+    bg.fill.fore_color.rgb = RGBColor(242, 249, 247)   # #F2F9F7 Soft Mint White
+    bg.line.color.rgb = RGBColor(242, 249, 247)
+
+    # Thin top header accent bar (Eucalyptus Teal)
+    bar = slide.shapes.add_shape(MSO_SHAPE.RECTANGLE, 0, 0, Inches(13.333), Inches(0.22))
+    bar.fill.solid()
+    bar.fill.fore_color.rgb = NAVY
+    bar.line.color.rgb = NAVY
+
+    # Left vertical accent stripe (sage)
+    stripe = slide.shapes.add_shape(MSO_SHAPE.RECTANGLE, 0, Inches(0.22), Inches(0.22), Inches(7.28))
+    stripe.fill.solid()
+    stripe.fill.fore_color.rgb = RGBColor(220, 240, 235)
+    stripe.line.color.rgb = RGBColor(220, 240, 235)
+
+    header_box = slide.shapes.add_textbox(Inches(0.8), Inches(0.32), Inches(11.7), Inches(1.15))
     tf = header_box.text_frame
     tf.word_wrap = True
     tf.margin_left = tf.margin_top = tf.margin_right = tf.margin_bottom = 0
-    
+
     p_cat = tf.paragraphs[0]
     p_cat.text = category_text.upper()
-    p_cat.font.size = Pt(11)
+    p_cat.font.size = Pt(10)
     p_cat.font.bold = True
     p_cat.font.color.rgb = TEAL
-    
+
     p_title = tf.add_paragraph()
     p_title.text = title_text
-    p_title.font.size = Pt(24)
+    p_title.font.size = Pt(23)
     p_title.font.bold = True
     p_title.font.color.rgb = NAVY
 
 def add_rationale_box(slide, why_text, relevance_text):
     left = Inches(0.8)
-    top = Inches(5.8)
+    top = Inches(5.78)
     width = Inches(11.7)
-    height = Inches(1.3)
-    
+    height = Inches(1.34)
+
     shape = slide.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, left, top, width, height)
     shape.fill.solid()
-    shape.fill.fore_color.rgb = BOX_BG
-    shape.line.color.rgb = TEAL
+    shape.fill.fore_color.rgb = BOX_BG   # Mint Foam
+    shape.line.color.rgb = TEAL           # Healing Sage Green border
     shape.line.width = Pt(1.5)
-    
+
     tf = shape.text_frame
     tf.word_wrap = True
-    tf.margin_left = Inches(0.2)
-    tf.margin_top = Inches(0.15)
-    tf.margin_right = Inches(0.2)
-    
+    tf.margin_left = Inches(0.22)
+    tf.margin_top = Inches(0.13)
+    tf.margin_right = Inches(0.22)
+
     p1 = tf.paragraphs[0]
-    p1.text = "WHY THIS IS HERE: " + why_text
-    p1.font.size = Pt(12)
+    p1.text = "WHY THIS IS HERE:  " + why_text
+    p1.font.size = Pt(11.5)
     p1.font.bold = True
     p1.font.color.rgb = NAVY
     
@@ -77,37 +97,56 @@ def add_rationale_box(slide, why_text, relevance_text):
 # ==============================================================================
 slide1 = prs.slides.add_slide(blank_layout)
 
+# Calm full background — soft clinical off-white/mint
 bg1 = slide1.shapes.add_shape(MSO_SHAPE.RECTANGLE, 0, 0, Inches(13.333), Inches(7.5))
 bg1.fill.solid()
-bg1.fill.fore_color.rgb = NAVY
-bg1.line.color.rgb = NAVY
+bg1.fill.fore_color.rgb = RGBColor(242, 249, 247)   # #F2F9F7 Soft Mint White
+bg1.line.color.rgb = RGBColor(242, 249, 247)
 
-tb1 = slide1.shapes.add_textbox(Inches(1.0), Inches(1.8), Inches(11.3), Inches(3.8))
+# Left accent band (calm deep eucalyptus)
+accent_band = slide1.shapes.add_shape(MSO_SHAPE.RECTANGLE, 0, 0, Inches(0.55), Inches(7.5))
+accent_band.fill.solid()
+accent_band.fill.fore_color.rgb = NAVY    # Deep Eucalyptus Teal
+accent_band.line.color.rgb = NAVY
+
+# Bottom subtle band
+bottom_band = slide1.shapes.add_shape(MSO_SHAPE.RECTANGLE, 0, Inches(6.75), Inches(13.333), Inches(0.75))
+bottom_band.fill.solid()
+bottom_band.fill.fore_color.rgb = RGBColor(220, 240, 235)  # #DCF0EB Light Mint
+bottom_band.line.color.rgb = RGBColor(220, 240, 235)
+
+# Subtle decorative circle (visual healthcare feel)
+circle = slide1.shapes.add_shape(MSO_SHAPE.OVAL, Inches(9.8), Inches(-0.8), Inches(4.5), Inches(4.5))
+circle.fill.solid()
+circle.fill.fore_color.rgb = RGBColor(220, 240, 235)   # Very light mint
+circle.line.color.rgb = RGBColor(220, 240, 235)
+
+tb1 = slide1.shapes.add_textbox(Inches(1.2), Inches(1.5), Inches(10.0), Inches(4.5))
 tf1 = tb1.text_frame
 tf1.word_wrap = True
 
 p_sub = tf1.paragraphs[0]
-p_sub.text = "BIG DATA ANALYTICS (BDA) | HEALTHCARE DECISION SUPPORT"
-p_sub.font.size = Pt(14)
+p_sub.text = "BIG DATA ANALYTICS (BDA)  |  HEALTHCARE DECISION SUPPORT"
+p_sub.font.size = Pt(13)
 p_sub.font.bold = True
-p_sub.font.color.rgb = TEAL
+p_sub.font.color.rgb = TEAL   # Healing Sage Green
 
 p_main = tf1.add_paragraph()
 p_main.text = "Scalable Diabetes Risk Prediction\n& Clinical Analytics System"
 p_main.font.size = Pt(36)
 p_main.font.bold = True
-p_main.font.color.rgb = WHITE
+p_main.font.color.rgb = NAVY   # Deep Eucalyptus Teal
 
 p_desc = tf1.add_paragraph()
-p_desc.text = "Population-Scale Predictive Screening on 253,680 CDC Patient Encounters using Distributed Machine Learning & Explainable AI"
-p_desc.font.size = Pt(16)
-p_desc.font.color.rgb = RGBColor(203, 213, 225)
+p_desc.text = "\nPopulation-Scale Predictive Screening on 253,680 CDC Patient Encounters using Distributed Machine Learning & Explainable AI"
+p_desc.font.size = Pt(15)
+p_desc.font.color.rgb = DARK_GRAY   # Muted Slate
 
 p_author = tf1.add_paragraph()
 p_author.text = "\nPresenter: Rishaadvp  |  Dataset: CDC BRFSS 2015 (253k rows, 21 attributes)  |  Target: BDA Project"
-p_author.font.size = Pt(14)
+p_author.font.size = Pt(13)
 p_author.font.bold = True
-p_author.font.color.rgb = WHITE
+p_author.font.color.rgb = TEAL
 
 notes1 = slide1.notes_slide.notes_text_frame
 notes1.text = "Speaker Notes:\nWelcome professors and evaluators. Today I am presenting our Big Data Analytics project: Scalable Diabetes Risk Prediction and Clinical Analytics. We developed an end-to-end distributed screening system trained on over a quarter of a million real-world patient records from the CDC."

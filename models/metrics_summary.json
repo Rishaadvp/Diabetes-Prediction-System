@@ -31,7 +31,7 @@
             "recall": 0.7611,
             "f1_score": 0.4413,
             "roc_auc": 0.8196,
-            "train_time_sec": 0.27
+            "train_time_sec": 0.21
         },
         "Random Forest (100 Trees)": {
             "accuracy": 0.7464,
@@ -39,7 +39,7 @@
             "recall": 0.7399,
             "f1_score": 0.4484,
             "roc_auc": 0.8227,
-            "train_time_sec": 4.07
+            "train_time_sec": 5.33
         },
         "HistGradientBoosting": {
             "accuracy": 0.7197,
@@ -47,7 +47,7 @@
             "recall": 0.7946,
             "f1_score": 0.4413,
             "roc_auc": 0.8268,
-            "train_time_sec": 4.39
+            "train_time_sec": 7.97
         }
     }
 }
